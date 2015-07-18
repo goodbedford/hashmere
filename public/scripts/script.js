@@ -16,6 +16,15 @@ $(function() {
 	}]
 
 	var template = _.template($("#template").html());
+
+	// $.ajax({
+	// 	url: "/",
+	// 	type: "GET",
+	// 	success: function(data) {
+	// 		console.log(data);
+	// 	}
+	// })
+
 	_.each(seedTwitter, function(twit) {
 		$("#socialMedia").prepend(template(twit));
 	});
