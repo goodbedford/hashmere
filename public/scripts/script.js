@@ -1,33 +1,30 @@
 $(function() {
 
-	//Seed data
-	var seedTwitter = {tag: "starbucks", tweets: [{
-		id: 621748676776431617,
-		id_str: "621748676776431617" 
-	}, {
-		id: 621815451362799616,
-		id_str: "621815451362799616" 
-	}, {
-		id: 621748676776431617,
-		id_str: "621748676776431617" 
-	}, {
-		id: 621815451362799616,
-		id_str: "621815451362799616" 
-	}]}
+	function hashmereController () {};
 
-	var template = _.template($("#template").html());
+	hashmereController.prototype.template = _.template($("#template").html());
+	hashmereController.prototype.render = function(obj) {
+		_.each(obj, function(item) {
+			$("#socialMedia").prepend(hashmereController.prototype.template(item));
+		});
+	};
 
-	_.each(seedTwitter.tweets, function(twit) {
-		$("#socialMedia").prepend(template(twit));
-	});
-
-	// $.ajax({
-	// 	url: "/",
-	// 	type: "GET",
-	// 	success: function(data) {
-	// 		console.log(data);
-	// 	}
-	// })
+	hashmereController.prototype.all = function() {
+		$.ajax({
+			url: "/profile",
+			type: "GET",
+			success: function(res) {
+				var tweetData = res.tweets;
+				console.log(tweetData);
+				hashmereController.prototype.render(tweetData);
+			},
+			error: function() {
+				console.log("error!");
+			}
+		})		
+	};
+	
+	hashmereController.prototype.all();
 });
 
 window.onload = (function(){

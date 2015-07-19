@@ -1,3 +1,8 @@
 .navbar {
 	margin-bottom: 0px;
 }
+
+.jumbotron {
+	background: url(https://www.agtinternational.com/wp-content/uploads/2013/11/City-solution.jpg);
+	background-size: cover;
+}

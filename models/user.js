@@ -1,19 +1,49 @@
 var mongoose = require("mongoose"),
-	Schema = mongoose.Schema;
+	Schema = mongoose.Schema,
+	bcrypt = require("bcrypt"),
+	salt = bcrypt.genSaltSync(10);
 
 
-var tagSchema = new Schema({
+var TagSchema = new Schema({
 	tag: {type: String, required: true}
 });
-var Tag = mongoose.model("Tag", tagSchema);
 
-
-var userSchema = new Schema({
-	userName: {type: String, required: true},
-	userPassword: {type: String, required: true},
-	tags: [tagSchema]
+var UserSchema = new Schema({
+	email: {type: String, required: true},
+	passwordDigest: {type: String, required: true},
+	tags: [TagSchema]
 });
-var User = mongoose.model("User", userSchema);
+
+
+UserSchema.statics.createSecure = function(email, password, callback) {
+	var that = this;
+	bcrypt.genSalt(function(err, salt) {
+		bcrypt.hash(password, salt, function(err, hash) {
+			console.log(hash);
+			that.create({
+				email: email,
+				passwordDigest: hash},
+				callback);
+		});
+	});
+};
+
+UserSchema.statics.authenticate = function(email, password, callback) {
+	this.findOne({email: email}, function(err, user) {
+		if (user === null) {
+			throw new Error("Bad username or password");
+		} else if (user.checkPassword(password)) {
+			callback(null, user);
+		}
+	});
+};
+
+UserSchema.methods.checkPassword = function(password) {
+	return bcrypt.compareSync(password, this.passwordDigest);
+};
+
+var Tag = mongoose.model("Tag", TagSchema);
+var User = mongoose.model("User", UserSchema);
 
 module.exports.User = User;
 module.exports.Tag = Tag;
