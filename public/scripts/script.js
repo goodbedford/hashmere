@@ -15,16 +15,42 @@ $(function() {
 			type: "GET",
 			success: function(res) {
 				var tweetData = res.tweets;
-				console.log(tweetData);
 				hashmereController.prototype.render(tweetData);
 			},
 			error: function() {
 				console.log("error!");
 			}
-		})		
+		});	
 	};
+
+	hashmereController.prototype.signup = function(obj) {
+		$.ajax({
+			url: "/signup",
+			type: "POST",
+			data: obj,
+			success: function(res) {
+				console.log(res);
+			},
+			error: function() {
+				console.log("error!");
+			}
+		});
+	};
+
+	hashmereController.prototype.setView = function() {
+		hashmereController.prototype.all();
+
+		$("#signupForm").on("submit", function(event) {
+			event.preventDefault();
+			var newEmail = $("#newemail").val();
+			var newPassword = $("#newpassword").val();
+
+			var newSignup = {email: newEmail, password: newPassword};
+			hashmereController.prototype.signup(newSignup);
+		});		
+	}
 	
-	hashmereController.prototype.all();
+	hashmereController.prototype.setView();
 });
 
 window.onload = (function(){
