@@ -3,8 +3,14 @@ var express = require("express"),
 	bodyParser = require("body-parser"),
 	mongoose = require("mongoose"),
 	session = require("express-session"),
-	Twitter = require("mtwitter");
+	Twitter = require("mtwitter"),
+	dotenv = require("dotenv"),
 	app = express();
+
+dotenv.load();
+
+var env = process.env;
+console.log(process.env);
 
 //session cookie middleware
 app.use(session({
@@ -15,6 +21,7 @@ app.use(session({
 }));
 // middleware to manage sessions
 app.use('/', function (req, res, next) {
+
   // saves userId in session for logged-in user
   req.login = function (user) {
     req.session.userId = user.id;
@@ -46,16 +53,11 @@ mongoose.connect(
 var db = require("./models/user");
 
 var twitter = new Twitter({
-    consumer_key: "5JE0LQPrjlVDlK0JTW4xhLkF8",
-    consumer_secret: "UmdOjYnowCXeya0KoyBZuTOMx3jrhLqCt8vyWMEYfP0oMvBohO",
+    consumer_key: env.consumerKey,
+    consumer_secret: env.consumerSecret,
     application_only: true
 });
 
-// var twitter = new Twitter({
-//     consumer_key: db.Auth.find(function(err, found) {found.consumerKey}),
-//     consumer_secret: db.Auth.find(function(err, found) {found.consumerSecret}),
-//     application_only: true
-// });
 
 app.get("/", function(req, res) {
 	res.sendFile(__dirname + "/public/views/index.html");
