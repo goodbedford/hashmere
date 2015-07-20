@@ -6,21 +6,6 @@ var express = require("express"),
 	Twitter = require("mtwitter");
 	app = express();
 
-	//Seed data
-	var seedTwitter = {tag: "starbucks", tweets: [{
-		id: 621748676776431617,
-		id_str: "621748676776431617" 
-	}, {
-		id: 621815451362799616,
-		id_str: "621815451362799616" 
-	}, {
-		id: 621748676776431617,
-		id_str: "621748676776431617" 
-	}, {
-		id: 621815451362799616,
-		id_str: "621815451362799616" 
-	}]};		
-
 //session cookie middleware
 app.use(session({
 	saveUninitialized: true,
@@ -54,7 +39,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 //where to find js and css files
 app.use(express.static(__dirname + "/public"));
 
-mongoose.connect('mongodb://localhost/hashmere');
+mongoose.connect(
+	process.env.MONGOLAB_URI ||
+	process.env.MONGOHQ_URL ||
+	'mongodb://localhost/hashmere');
 var db = require("./models/user");
 
 var twitter = new Twitter({
@@ -62,6 +50,12 @@ var twitter = new Twitter({
     consumer_secret: "UmdOjYnowCXeya0KoyBZuTOMx3jrhLqCt8vyWMEYfP0oMvBohO",
     application_only: true
 });
+
+// var twitter = new Twitter({
+//     consumer_key: db.Auth.find(function(err, found) {found.consumerKey}),
+//     consumer_secret: db.Auth.find(function(err, found) {found.consumerSecret}),
+//     application_only: true
+// });
 
 app.get("/", function(req, res) {
 	res.sendFile(__dirname + "/public/views/index.html");
@@ -139,6 +133,4 @@ app.put("/saved", function(req, res) {
 });
 
 
-app.listen(3000, function() {
-	console.log("I'm listening");
-});
+app.listen(process.env.PORT || 3000);
