@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-	<nav class="navbar navbar-default">
+	<nav class="navbar navbar-default" id="unique-nav">
 		<div class="container">
 			<button type="button" class="btn btn-default navbar-btn navbar-right" id="login" data-toggle="modal" data-target="#login-modal">login</button>
 			<button type="button" class="btn btn-default navbar-btn navbar-right" id="signup" data-toggle="modal" data-target="#signup-modal">signup</button>
@@ -100,9 +100,24 @@
 	</div>	 -->
 
 <!-- <div id="tweet" tweetID="515490786800963584"></div> -->
-
+<!-- signed in template -->
 <script id="template" type="text/template">
 			<div class="col-md-3 cards" id="<%= id %>" id_str="<%= id_str%>"></div>	
+</script>
+<!-- anon template -->
+<script id="anonTemplate" type="text/template">
+			<div>
+				<p>Search for something</p>
+			</div>	
+</script>
+<!-- navigation bar template -->
+<script id="navTemplate" type="text/template">
+	<nav class="navbar navbar-default" id="unique-nav">
+		<div class="container">
+			<button type="button" class="btn btn-default navbar-btn navbar-right" id="signout">log out</button>
+			<p class="navbar-text">Signed in as <%= email %></p>
+		</div>
+	</nav>
 </script>
 
 <!-- underscore -->

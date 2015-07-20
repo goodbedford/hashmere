@@ -18,7 +18,7 @@ var express = require("express"),
 	}, {
 		id: 621815451362799616,
 		id_str: "621815451362799616" 
-	}]}	
+	}]};		
 
 //session cookie middleware
 app.use(session({
@@ -57,17 +57,20 @@ mongoose.connect('mongodb://localhost/hashmere');
 var db = require("./models/user");
 
 app.get("/", function(req, res) {
-	req.currentUser(function(err, user) {
-		if (user !== null) {
-			res.sendFile(__dirname + "/public/views/index.html");
-		} else {
-			res.sendFile(__dirname + "/public/views/index.html");		}
-	});
+	res.sendFile(__dirname + "/public/views/index.html");
 });
 
 app.get("/profile", function(req, res) {
-	res.json(seedTwitter);
-})
+	req.currentUser(function(err, user) {
+		if (user !==null) {
+			console.log("this is profile user", user);
+      res.json(user);
+		} else {
+			console.log("there is no user");
+			res.send(null);
+		}
+	});
+});
 
 app.post("/signup", function(req, res) {
 	var newUser = {
@@ -86,11 +89,31 @@ app.post("/login", function(req, res) {
 	};
 	db.User.authenticate(userData.email, userData.password, function(err, user) {
 		req.login(user);
-		res.redirect("/");
+		res.redirect("/profile");
 	});
 });
 
+app.post("/logout", function(req, res) {
+	req.logout();
+	res.send("Success");
+});
 
+app.put("/search", function(req, res) {
+	req.currentUser(function(err, user) {
+		if (user !== null) {
+			console.log(user);
+			var newTag = new db.Tag({
+				name: req.body.name
+			});
+			newTag.save();
+			user.tags.push(newTag);
+			user.save();
+			res.json(user.tags);
+		} else {
+			res.json(req.body.name);
+		};
+	});
+});
 
 
 

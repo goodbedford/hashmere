@@ -5,7 +5,7 @@ var mongoose = require("mongoose"),
 
 
 var TagSchema = new Schema({
-	tag: {type: String, required: true}
+	name: {type: String, required: true}
 });
 
 var UserSchema = new Schema({
@@ -19,7 +19,6 @@ UserSchema.statics.createSecure = function(email, password, callback) {
 	var that = this;
 	bcrypt.genSalt(function(err, salt) {
 		bcrypt.hash(password, salt, function(err, hash) {
-			console.log(hash);
 			that.create({
 				email: email,
 				passwordDigest: hash},
