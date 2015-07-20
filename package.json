@@ -22,6 +22,7 @@
     "express": "^4.13.1",
     "express-session": "^1.11.3",
     "mongoose": "^4.0.7",
+    "mtwitter": "^1.6.4",
     "underscore": "^1.8.3"
   }
 }

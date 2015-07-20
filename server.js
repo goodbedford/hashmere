@@ -3,6 +3,7 @@ var express = require("express"),
 	bodyParser = require("body-parser"),
 	mongoose = require("mongoose"),
 	session = require("express-session"),
+	Twitter = require("mtwitter");
 	app = express();
 
 	//Seed data
@@ -56,6 +57,12 @@ app.use(express.static(__dirname + "/public"));
 mongoose.connect('mongodb://localhost/hashmere');
 var db = require("./models/user");
 
+var twitter = new Twitter({
+    consumer_key: "5JE0LQPrjlVDlK0JTW4xhLkF8",
+    consumer_secret: "UmdOjYnowCXeya0KoyBZuTOMx3jrhLqCt8vyWMEYfP0oMvBohO",
+    application_only: true
+});
+
 app.get("/", function(req, res) {
 	res.sendFile(__dirname + "/public/views/index.html");
 });
@@ -64,7 +71,7 @@ app.get("/profile", function(req, res) {
 	req.currentUser(function(err, user) {
 		if (user !==null) {
 			console.log("this is profile user", user);
-      res.json(user);
+      res.send(user);
 		} else {
 			console.log("there is no user");
 			res.send(null);
@@ -108,15 +115,28 @@ app.put("/search", function(req, res) {
 			newTag.save();
 			user.tags.push(newTag);
 			user.save();
-			res.json(user.tags);
+			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent"}, function(err, tweets) {
+				res.json(tweets);
+			});
 		} else {
-			res.json(req.body.name);
+			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent"}, function(err, tweets) {
+				res.json(tweets);
+			});
 		};
 	});
 });
 
-
-
+app.put("/saved", function(req, res) {
+	req.currentUser(function(err, user) {
+		if (user!== null) {
+			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent"}, function(err, tweets) {
+				res.json(tweets);
+			});				
+		} else {
+			res.send("not a user");
+		};
+	});
+});
 
 
 app.listen(3000, function() {

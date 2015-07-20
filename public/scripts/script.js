@@ -19,7 +19,7 @@ $(function() {
 		twttr.widgets.createTweet(id, target, 
 		  {
 		    conversation : 'none',    // or all
-		    cards        : 'hidden',  // or visible 
+		    cards        : 'visible',  // or visible 
 		    theme        : 'light'    // or dark
 		  });
 		};		
@@ -32,7 +32,10 @@ $(function() {
 			success: function(res) {
 				if (res.tags) {
 					var tweetData = res.tags;
-					hashmereController.prototype.render(tweetData);
+					if (tweetData.length > 0) {
+						console.log(tweetData);
+						hashmereController.prototype.saved(tweetData[0].name);
+					};
 					$("#unique-nav").replaceWith(hashmereController.prototype.navTemplate(res));
 					$("#signout").on("click", function() {
 						console.log("clicked");
@@ -96,7 +99,25 @@ $(function() {
 			type: "PUT",
 			data: obj,
 			success: function(res) {
-				console.log(res);
+				var tweetArr = res.statuses;
+				$("#socialMedia").replaceWith($("#resetContent").html());
+				hashmereController.prototype.render(tweetArr);				
+			},
+			error: function() {
+				console.log("error!");
+			}
+		});
+	};
+
+	hashmereController.prototype.saved = function(obj) {
+		$.ajax({
+			url: "/saved",
+			type: "PUT",
+			data: {name: obj},
+			success: function(res) {
+				var tweetArr = res.statuses;
+				$("#socialMedia").replaceWith($("#resetContent").html());
+				hashmereController.prototype.render(tweetArr);
 			},
 			error: function() {
 				console.log("error!");
@@ -125,6 +146,7 @@ $(function() {
 		});
 		$("#search").on("submit", function(event) {
 			event.preventDefault();
+			console.log("clicked");
 			var search = $("#hash-search").val();
 			var searchObj = {name: search};
 			hashmereController.prototype.search(searchObj);
