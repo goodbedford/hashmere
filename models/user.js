@@ -35,7 +35,7 @@ UserSchema.statics.createSecure = function(email, password, callback) {
 UserSchema.statics.authenticate = function(email, password, callback) {
 	this.findOne({email: email}, function(err, user) {
 		if (user === null) {
-			throw new Error("Bad username or password");
+			callback(user);
 		} else if (user.checkPassword(password)) {
 			callback(null, user);
 		}

@@ -10,7 +10,6 @@ $(function() {
 		});
 
 		var $tweet = $(".cards");
-		var id = $($tweet[0]).attr("id_str");
 
 		for (i = 0; i < $tweet.length; i++) {
 			var target = $tweet[i];
@@ -33,8 +32,8 @@ $(function() {
 				if (res.tags) {
 					var tweetData = res.tags;
 					if (tweetData.length > 0) {
-						console.log(tweetData);
-						hashmereController.prototype.saved(tweetData[0].name);
+						var len = tweetData.length - 1;
+						hashmereController.prototype.saved(tweetData[len].name);
 					};
 					$("#unique-nav").replaceWith(hashmereController.prototype.navTemplate(res));
 					$("#signout").on("click", function() {
@@ -100,6 +99,7 @@ $(function() {
 			data: obj,
 			success: function(res) {
 				var tweetArr = res.statuses;
+				console.log(tweetArr);
 				$("#socialMedia").replaceWith($("#resetContent").html());
 				hashmereController.prototype.render(tweetArr);				
 			},
@@ -116,6 +116,7 @@ $(function() {
 			data: {name: obj},
 			success: function(res) {
 				var tweetArr = res.statuses;
+				console.log(tweetArr);
 				$("#socialMedia").replaceWith($("#resetContent").html());
 				hashmereController.prototype.render(tweetArr);
 			},

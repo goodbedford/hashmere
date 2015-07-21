@@ -32,10 +32,8 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="row">	
-			<div class="col-md-10 col-md-offset-1" id="socialMedia">						
-			</div>
+		</div>	
+		<div class="col-md-10 col-md-offset-1 contentBox" id="socialMedia">						
 		</div>
 
 	<!-- LOGIN MODAL -->
@@ -54,9 +52,9 @@
 							<input class="form-control" id="password" type="password" name="password" placeholder="password..."/>
 						</div>
 						<div>
-			        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-			        <button type="submit" class="btn btn-primary">Login</button>
-			      </div>  					
+					        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					        <button type="submit" class="btn btn-primary">Login</button>
+			      		</div>  					
 					</form>
 	      </div>
 	    </div><!-- /.modal-content -->
@@ -79,9 +77,9 @@
 							<input class="form-control" id="newpassword" type="password" name="newpassword" placeholder="password..."/>
 						</div>
 						<div>
-			        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-			        <button type="submit" class="btn btn-primary">Sign Up</button>
-			      </div>  					
+					        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					        <button type="submit" class="btn btn-primary">Sign Up</button>
+				      	</div>  					
 					</form>
 	      </div>
 	    </div><!-- /.modal-content -->
@@ -91,7 +89,7 @@
 
 	<!-- signed in template -->
 	<script id="template" type="text/template">
-				<div class="col-md-3 cards" id="<%= id %>" id_str="<%= id_str%>"></div>	
+				<div class="col-md-3 cards" id="<%= id_str %>" id_str="<%= id_str%>"></div>	
 	</script>
 	<!-- anon template -->
 	<script id="anonTemplate" type="text/template">

@@ -10,7 +10,6 @@ var express = require("express"),
 dotenv.load();
 
 var env = process.env;
-console.log(process.env);
 
 //session cookie middleware
 app.use(session({
@@ -24,7 +23,11 @@ app.use('/', function (req, res, next) {
 
   // saves userId in session for logged-in user
   req.login = function (user) {
+  	if (user !== undefined) {
     req.session.userId = user.id;
+  	} else {
+  		req.session.userId = null;
+  	}
   };
   // finds user currently logged in based on `session.userId`
   req.currentUser = function (callback) {
@@ -104,18 +107,17 @@ app.post("/logout", function(req, res) {
 app.put("/search", function(req, res) {
 	req.currentUser(function(err, user) {
 		if (user !== null) {
-			console.log(user);
 			var newTag = new db.Tag({
 				name: req.body.name
 			});
 			newTag.save();
 			user.tags.push(newTag);
 			user.save();
-			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent"}, function(err, tweets) {
+			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent", count: 4}, function(err, tweets) {
 				res.json(tweets);
 			});
 		} else {
-			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent"}, function(err, tweets) {
+			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent", count: 4}, function(err, tweets) {
 				res.json(tweets);
 			});
 		};
@@ -125,7 +127,7 @@ app.put("/search", function(req, res) {
 app.put("/saved", function(req, res) {
 	req.currentUser(function(err, user) {
 		if (user!== null) {
-			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent"}, function(err, tweets) {
+			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent", count: 4}, function(err, tweets) {
 				res.json(tweets);
 			});				
 		} else {
