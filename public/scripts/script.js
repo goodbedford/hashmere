@@ -6,22 +6,23 @@ $(function() {
 	hashmereController.prototype.navTemplate = _.template($("#navTemplate").html());
 	hashmereController.prototype.render = function(obj) {
 		_.each(obj, function(item) {
-			$("#socialMedia").prepend(hashmereController.prototype.template(item));
+				$("#socialMedia").prepend(hashmereController.prototype.template(item));
+
+				var target = $("#"+item.id_str);
+				var id = item.id_str;
+
+				twttr.widgets.createTweet(id, target[0], 
+				  {
+				    conversation : 'none',    // or all
+				    cards        : 'hidden',  // or visible 
+				    theme        : 'light',    // or dark
+				    width        : '300'	
+				  })
+				  .then(function() {
+				  	var temp = $("#"+item.id_str+" iframe");
+					$(temp[0].contentDocument.getElementsByClassName("EmbeddedTweet")[0]).attr("style", "overflow:scroll; height:120px");
+				  })				
 		});
-
-		var $tweet = $(".cards");
-
-		for (i = 0; i < $tweet.length; i++) {
-			var target = $tweet[i];
-			var id = $($tweet[i]).attr("id_str");
-
-		twttr.widgets.createTweet(id, target, 
-		  {
-		    conversation : 'none',    // or all
-		    cards        : 'visible',  // or visible 
-		    theme        : 'light'    // or dark
-		  });
-		};		
 	};
 
 	hashmereController.prototype.all = function() {
@@ -156,21 +157,3 @@ $(function() {
 	
 	hashmereController.prototype.setView();
 });
-
-// window.onload = (function(){
-
-// 	var $tweet = $(".cards");
-// 	var id = $($tweet[0]).attr("id_str");
-
-// 	for (i = 0; i < $tweet.length; i++) {
-// 		var target = $tweet[i];
-// 		var id = $($tweet[i]).attr("id_str");
-
-// 	twttr.widgets.createTweet(id, target, 
-// 	  {
-// 	    conversation : 'none',    // or all
-// 	    cards        : 'hidden',  // or visible 
-// 	    theme        : 'light'    // or dark
-// 	  });
-// 	}
-// });

@@ -7,6 +7,6 @@
 	background-size: cover;
 }
 
-/*.contentBox {
-	display: flex;
-}*/
+iframe {
+	height: 120px;
+}

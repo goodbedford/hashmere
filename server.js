@@ -113,11 +113,11 @@ app.put("/search", function(req, res) {
 			newTag.save();
 			user.tags.push(newTag);
 			user.save();
-			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent", count: 4}, function(err, tweets) {
+			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent", count: 12}, function(err, tweets) {
 				res.json(tweets);
 			});
 		} else {
-			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent", count: 4}, function(err, tweets) {
+			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent", count: 12}, function(err, tweets) {
 				res.json(tweets);
 			});
 		};
@@ -127,7 +127,7 @@ app.put("/search", function(req, res) {
 app.put("/saved", function(req, res) {
 	req.currentUser(function(err, user) {
 		if (user!== null) {
-			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent", count: 4}, function(err, tweets) {
+			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent", count: 12}, function(err, tweets) {
 				res.json(tweets);
 			});				
 		} else {
