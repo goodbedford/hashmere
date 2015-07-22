@@ -126,12 +126,19 @@ app.post("/logout", function(req, res) {
 app.put("/search", function(req, res) {
 	req.currentUser(function(err, user) {
 		if (user !== null) {
-			var newTag = new db.Tag({
-				name: req.body.name
+			db.Tag.find({name: req.body.name}, function(err, found) {
+				if (found.length > 0) {
+					user.tags.push(found);
+					user.save();
+				} else {
+					var newTag = new db.Tag({
+						name: req.body.name
+					});
+					newTag.save();
+					user.tags.push(newTag);
+					user.save();
+				};
 			});
-			newTag.save();
-			user.tags.push(newTag);
-			user.save();
 			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent", count: 12}, function(err, tweets) {
 				res.json(tweets);
 			});

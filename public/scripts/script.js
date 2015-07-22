@@ -115,15 +115,19 @@ $(function() {
 				var tweetArr = res.statuses;
 				$("#socialMedia").replaceWith($("#resetContent").html());
 				hashmereController.prototype.render(tweetArr);
-				$("#searchTags").append(hashmereController.prototype.tagTemplate(obj));
-				$("#tag-"+obj.name).on("click", function() {
-					var searchAgain = {name: $(this).attr("data-name")};
-					hashmereController.prototype.savedTag(searchAgain);
-				});
-				$("#close-"+obj.name).on("click", function() {
-					var tagDel = {name: $(this).attr("data-name")};
-					hashmereController.prototype.deleteTag(tagDel);
-				});								
+				if ($("#tag-"+obj.name).length > 0) {
+					console.log("tag exists");
+				} else {
+					$("#searchTags").append(hashmereController.prototype.tagTemplate(obj));
+					$("#tag-"+obj.name).on("click", function() {
+						var searchAgain = {name: $(this).attr("data-name")};
+						hashmereController.prototype.savedTag(searchAgain);
+					});
+					$("#close-"+obj.name).on("click", function() {
+						var tagDel = {name: $(this).attr("data-name")};
+						hashmereController.prototype.deleteTag(tagDel);
+					});
+				}								
 			},
 			error: function() {
 				console.log("error!");
