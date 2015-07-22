@@ -95,9 +95,8 @@ $(function() {
 	hashmereController.prototype.logout = function() {
 		$.ajax({
 			url: "/logout",
-			type: "POST",
+			type: "GET",
 			success: function(res) {
-				console.log(res);
 				location.reload(true);
 			},
 			error: function() {

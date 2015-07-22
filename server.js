@@ -75,10 +75,10 @@ app.get("/", function(req, res) {
 
 app.get("/profile", function(req, res) {
 	req.currentUser(function(err, user) {
-		if (user !==null) {
-      res.send(user);
+		if (user != undefined) {
+		    res.send(user);
 		} else {
-			res.send(null);
+			res.send("no user");
 		}
 	});
 });
@@ -96,6 +96,7 @@ app.post("/signup", function(req, res) {
 					password: req.body.password
 				};
 				db.User.createSecure(newUser.email, newUser.password, function(err, user) {
+					console.log("testing");
 					res.send(user);
 				});
 			};
@@ -109,7 +110,7 @@ app.post("/login", function(req, res) {
 		password: req.body.password
 	};
 	db.User.authenticate(userData.email, userData.password, function(err, user) {
-		if (user !== undefined) {
+		if (user != undefined) {
 			req.login(user);
 			res.redirect("/profile");
 		} else {
@@ -118,17 +119,18 @@ app.post("/login", function(req, res) {
 	});
 });
 
-app.post("/logout", function(req, res) {
+app.get("/logout", function(req, res) {
 	req.logout();
 	res.send("Success");
 });
 
 app.put("/search", function(req, res) {
 	req.currentUser(function(err, user) {
-		if (user !== null) {
+		if (user != undefined) {
 			db.Tag.find({name: req.body.name}, function(err, found) {
+				console.log("tag found: ", found)
 				if (found.length > 0) {
-					user.tags.push(found);
+					user.tags.push(found[0]);
 					user.save();
 				} else {
 					var newTag = new db.Tag({
@@ -158,7 +160,7 @@ app.put("/tag", function(req, res) {
 
 app.delete("/tag", function(req, res) {
 	req.currentUser(function(err, user) {
-		if (user !==null) {
+		if (user != undefined) {
 			db.User.findOneAndUpdate({_id: user.id}, {$pull: {tags: {name: req.body.name}}}, function(err, updated) {
 				console.log(updated);
 				res.send("deleted");
@@ -171,7 +173,7 @@ app.delete("/tag", function(req, res) {
 
 app.put("/lastsearch", function(req, res) {
 	req.currentUser(function(err, user) {
-		if (user!== null) {
+		if (user!= undefined) {
 			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent", count: 12}, function(err, tweets) {
 				res.json(tweets);
 			});				

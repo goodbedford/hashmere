@@ -30,10 +30,12 @@ UserSchema.statics.createSecure = function(email, password, callback) {
 UserSchema.statics.authenticate = function(email, password, callback) {
 	this.findOne({email: email}, function(err, user) {
 		if (user === null) {
-			callback(user);
+			callback(null);
 		} else if (user.checkPassword(password)) {
 			callback(null, user);
-		}
+		} else {
+			callback(null);
+		};
 	});
 };
 
