@@ -15,7 +15,7 @@ var env = process.env;
 app.use(session({
 	saveUninitialized: true,
 	resave: true,
-	secret: "SuperSecret",
+	secret: env.SESSION_KEY,
 	cookie: {maxAge: 60000}
 }));
 // middleware to manage sessions
@@ -61,12 +61,12 @@ var twitter = new Twitter({
     application_only: true
 });
 
-var twitterUser = new Twitter({
-    consumer_key: env.consumerKey,
-    consumer_secret: env.consumerSecret,
-    access_token_key: "SUPER SECRET",
-    access_token_secret: "TRULY SECRET"
-});
+// var twitterUser = new Twitter({
+//     consumer_key: env.consumerKey,
+//     consumer_secret: env.consumerSecret,
+//     access_token_key: "SUPER SECRET",
+//     access_token_secret: "TRULY SECRET"
+// });
 
 
 app.get("/", function(req, res) {
@@ -84,13 +84,23 @@ app.get("/profile", function(req, res) {
 });
 
 app.post("/signup", function(req, res) {
-	var newUser = {
-		email: req.body.email,
-		password: req.body.password
+	if (req.body.password.length < 8) {
+		res.status(400).send({message: "invalid password: Needs to be at least 8 characters"});
+	} else {
+		db.User.find({email: req.body.email}, function(err, found) {
+			if (found.length > 0) {
+				res.status(400).send({message: "email already exists"});
+			} else {
+				var newUser = {
+					email: req.body.email,
+					password: req.body.password
+				};
+				db.User.createSecure(newUser.email, newUser.password, function(err, user) {
+					res.send(user);
+				});
+			};
+		});
 	};
-	db.User.createSecure(newUser.email, newUser.password, function(err, user) {
-		res.send(user);
-	});
 });
 
 app.post("/login", function(req, res) {
@@ -99,8 +109,12 @@ app.post("/login", function(req, res) {
 		password: req.body.password
 	};
 	db.User.authenticate(userData.email, userData.password, function(err, user) {
-		req.login(user);
-		res.redirect("/profile");
+		if (user !== undefined) {
+			req.login(user);
+			res.redirect("/profile");
+		} else {
+			res.status(400).send({message: "bad username or password"});
+		}	
 	});
 });
 

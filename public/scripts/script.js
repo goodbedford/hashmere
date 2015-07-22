@@ -72,8 +72,8 @@ $(function() {
 			success: function(res) {
 				hashmereController.prototype.login(obj);
 			},
-			error: function() {
-				console.log("error!");
+			error: function(res, status, error) {
+				alert(res.responseJSON.message);
 			}
 		});
 	};
@@ -86,8 +86,8 @@ $(function() {
 			success: function(res) {
 				location.reload(true);
 			},
-			error: function() {
-				console.log("error!");
+			error: function(res, status, error) {
+				alert(res.responseJSON.message);
 			}
 		});
 	};
@@ -190,6 +190,42 @@ $(function() {
 			var newSignup = {email: newEmail, password: newPassword};
 			hashmereController.prototype.signup(newSignup);
 		});
+		$("#newpassword").on("input", function() {
+			if ($("#newpassword").val().length >= 8) {
+				$("#passwordcheck").attr("class", "has-success");
+				$("#helppassword").attr("style", "display:none");
+			} else if (($("#newpassword").val().length < 8) && ($("#newpassword").val().length > 0)) {
+				$("#passwordcheck").attr("class", "has-warning");
+				$("#helppassword").attr("style", "display:block");
+			} else {
+				$("#passwordcheck").removeAttr("class", "has-warning");
+				$("#passwordcheck").removeAttr("class", "has-success");
+				$("#helppassword").attr("style", "display:none");
+			};
+		});		
+		$("#newpasswordrepeat").on("input", function() {
+			if (($("#newpasswordrepeat").val() === ($("#newpassword").val())) && ($("#newpassword").val().length >= 8)) {
+				$("#helppasswordcheck").attr("style", "display:none");
+				$("#signupBtn").prop("disabled", false);
+				$("#passwordrecheck").attr("class", "has-success");
+			} else if (($("#newpasswordrepeat").val()) != ($("#newpassword").val())) {
+				$("#helppasswordcheck").attr("style", "display:block");
+				$("#helppasswordcheck1").attr("style", "display:none");
+				$("#signupBtn").prop("disabled", true);
+				$("#passwordrecheck").attr("class", "has-warning");
+			} else if (($("#newpassword").val().length < 8)) {
+				$("#helppasswordcheck1").attr("style", "display:block");
+				$("#helppasswordcheck").attr("style", "display:none");
+				$("#signupBtn").prop("disabled", true);
+				$("#passwordrecheck").attr("class", "has-warning");
+			} else {
+				$("#helppasswordcheck").attr("style", "display:none");
+				$("#helppasswordcheck1").attr("style", "display:none");
+				$("#signupBtn").prop("disabled", true);
+				$("#passwordrecheck").removeAttr("class", "has-warning");
+				$("#passwordrecheck").removeAttr("class", "has-success");
+			}
+		});		
 		$("#loginForm").on("submit", function(event) {
 			event.preventDefault();
 			var email = $("#email").val();
@@ -198,14 +234,30 @@ $(function() {
 			var login = {email: email, password: password};
 			hashmereController.prototype.login(login);
 		});
+		$("#email").on("input", function() {
+			if ($("#email").val().length >0) {
+				$("#loginBtn").prop("disabled", false);
+			} else {
+				$("#loginBtn").prop("disabled", true);
+			}
+		});
 		$("#search").on("submit", function(event) {
 			event.preventDefault();
 			console.log("clicked");
 			var search = $("#hash-search").val();
 			var searchObj = {name: search};
 			hashmereController.prototype.search(searchObj);
-		})				
-	}
+		});
+		$("#hash-search").on("input", function() {
+			if ($("#hash-search").val().length > 0) {
+				$("#searchBtn").prop("disabled", false);
+			} else {
+				$("#searchBtn").prop("disabled", true);
+			};
+		});				
+	};
 	
 	hashmereController.prototype.setView();
+
+
 });
