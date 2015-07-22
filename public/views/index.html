@@ -34,6 +34,8 @@
 			</div>
 		</div>
 		<div class="container" id="socialSpot">
+			<div class="col-md-8 col-md-offset-2" id="searchTags">
+			</div>
 			<div class="row clearfix">
 				<div class="col-md-10 col-md-offset-1" id="socialMedia">						
 				</div>			
@@ -114,6 +116,13 @@
 	<script id="resetContent" type="text/template">
 			<div class="col-md-10 col-md-offset-1" id="socialMedia">						
 			</div>
+	</script>
+
+	<script id="tagTemplate" type="text/template">
+				<div class="col-md-2" id="div-<%= name %>">
+					<button type="button" class="btn btn-xs" id="tag-<%= name %>" data-name="<%= name %>"><%= name %></button>
+					<button type="button" class="close" id="close-<%= name %>" data-name="<%= name %>" aria-label="Close"><span aria-hidden="true">&times;</span></button>					
+				</div>
 	</script>
 
 	<!-- underscore -->

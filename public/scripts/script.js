@@ -4,6 +4,8 @@ $(function() {
 
 	hashmereController.prototype.template = _.template($("#template").html());
 	hashmereController.prototype.navTemplate = _.template($("#navTemplate").html());
+	hashmereController.prototype.tagTemplate = _.template($("#tagTemplate").html());
+	
 	hashmereController.prototype.render = function(obj) {
 		_.each(obj, function(item) {
 				$("#socialMedia").prepend(hashmereController.prototype.template(item));
@@ -34,7 +36,18 @@ $(function() {
 					var tweetData = res.tags;
 					if (tweetData.length > 0) {
 						var len = tweetData.length - 1;
-						hashmereController.prototype.saved(tweetData[len].name);
+						_.each(tweetData, function(item) {
+							$("#searchTags").append(hashmereController.prototype.tagTemplate(item));
+							$("#tag-"+item.name).on("click", function() {
+								var searchAgain = {name: $(this).attr("data-name")};
+								hashmereController.prototype.savedTag(searchAgain);
+							});
+							$("#close-"+item.name).on("click", function() {
+								var tagDel = {name: $(this).attr("data-name")};
+								hashmereController.prototype.deleteTag(tagDel);
+							});							
+						});
+						hashmereController.prototype.lastSearch(tweetData[len].name);						
 					};
 					$("#unique-nav").replaceWith(hashmereController.prototype.navTemplate(res));
 					$("#signout").on("click", function() {
@@ -100,6 +113,31 @@ $(function() {
 			data: obj,
 			success: function(res) {
 				var tweetArr = res.statuses;
+				$("#socialMedia").replaceWith($("#resetContent").html());
+				hashmereController.prototype.render(tweetArr);
+				$("#searchTags").append(hashmereController.prototype.tagTemplate(obj));
+				$("#tag-"+obj.name).on("click", function() {
+					var searchAgain = {name: $(this).attr("data-name")};
+					hashmereController.prototype.savedTag(searchAgain);
+				});
+				$("#close-"+obj.name).on("click", function() {
+					var tagDel = {name: $(this).attr("data-name")};
+					hashmereController.prototype.deleteTag(tagDel);
+				});								
+			},
+			error: function() {
+				console.log("error!");
+			}
+		});
+	};
+
+	hashmereController.prototype.lastSearch = function(obj) {
+		$.ajax({
+			url: "/lastsearch",
+			type: "PUT",
+			data: {name: obj},
+			success: function(res) {
+				var tweetArr = res.statuses;
 				console.log(tweetArr);
 				$("#socialMedia").replaceWith($("#resetContent").html());
 				hashmereController.prototype.render(tweetArr);				
@@ -110,16 +148,30 @@ $(function() {
 		});
 	};
 
-	hashmereController.prototype.saved = function(obj) {
+	hashmereController.prototype.savedTag = function(obj) {
 		$.ajax({
-			url: "/saved",
+			url: "/tag",
 			type: "PUT",
-			data: {name: obj},
+			data: obj,
 			success: function(res) {
 				var tweetArr = res.statuses;
 				console.log(tweetArr);
 				$("#socialMedia").replaceWith($("#resetContent").html());
 				hashmereController.prototype.render(tweetArr);
+			},
+			error: function() {
+				console.log("error!");
+			}
+		});
+	};
+
+	hashmereController.prototype.deleteTag = function(obj) {
+		$.ajax({
+			url:"/tag",
+			type:"DELETE",
+			data: obj,
+			success: function(res) {
+				$("#div-"+obj.name).remove();
 			},
 			error: function() {
 				console.log("error!");

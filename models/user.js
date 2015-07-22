@@ -3,11 +3,6 @@ var mongoose = require("mongoose"),
 	bcrypt = require("bcrypt"),
 	salt = bcrypt.genSaltSync(10);
 
-var AuthSchema = new Schema({
-	consumerKey: String,
-	consumerSecret: String,
-	appToken: String
-});
 
 var TagSchema = new Schema({
 	name: {type: String, required: true}
@@ -46,10 +41,9 @@ UserSchema.methods.checkPassword = function(password) {
 	return bcrypt.compareSync(password, this.passwordDigest);
 };
 
-var Auth = mongoose.model("Auth", AuthSchema);
+
 var Tag = mongoose.model("Tag", TagSchema);
 var User = mongoose.model("User", UserSchema);
 
-module.exports.Auth = Auth;
 module.exports.User = User;
 module.exports.Tag = Tag;

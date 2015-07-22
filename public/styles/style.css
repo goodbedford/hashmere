@@ -5,8 +5,13 @@
 .jumbotron {
 	background: url(https://www.agtinternational.com/wp-content/uploads/2013/11/City-solution.jpg);
 	background-size: cover;
+	margin-bottom: 10px;
 }
 
 iframe {
 	height: 120px;
+}
+
+.close {
+	float:left;
 }

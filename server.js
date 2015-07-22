@@ -15,7 +15,7 @@ var env = process.env;
 app.use(session({
 	saveUninitialized: true,
 	resave: true,
-	secret: "SuperSecretSauce",
+	secret: "SuperSecret",
 	cookie: {maxAge: 60000}
 }));
 // middleware to manage sessions
@@ -61,6 +61,13 @@ var twitter = new Twitter({
     application_only: true
 });
 
+var twitterUser = new Twitter({
+    consumer_key: env.consumerKey,
+    consumer_secret: env.consumerSecret,
+    access_token_key: "SUPER SECRET",
+    access_token_secret: "TRULY SECRET"
+});
+
 
 app.get("/", function(req, res) {
 	res.sendFile(__dirname + "/public/views/index.html");
@@ -69,10 +76,8 @@ app.get("/", function(req, res) {
 app.get("/profile", function(req, res) {
 	req.currentUser(function(err, user) {
 		if (user !==null) {
-			console.log("this is profile user", user);
       res.send(user);
 		} else {
-			console.log("there is no user");
 			res.send(null);
 		}
 	});
@@ -124,7 +129,26 @@ app.put("/search", function(req, res) {
 	});
 });
 
-app.put("/saved", function(req, res) {
+app.put("/tag", function(req, res) {
+	twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent", count: 12}, function(err, tweets) {
+		res.json(tweets);
+	});
+});
+
+app.delete("/tag", function(req, res) {
+	req.currentUser(function(err, user) {
+		if (user !==null) {
+			db.User.findOneAndUpdate({_id: user.id}, {$pull: {tags: {name: req.body.name}}}, function(err, updated) {
+				console.log(updated);
+				res.send("deleted");
+			})
+		} else {
+			res.send("nothing to delete from db");
+		}
+	});
+});
+
+app.put("/lastsearch", function(req, res) {
 	req.currentUser(function(err, user) {
 		if (user!== null) {
 			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent", count: 12}, function(err, tweets) {
