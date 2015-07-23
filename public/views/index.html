@@ -5,6 +5,7 @@
 	<title>Hashmere</title>
 
 <!-- Latest compiled and minified CSS -->
+<link href='http://fonts.googleapis.com/css?family=Nothing+You+Could+Do' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link rel="stylesheet" href="styles/style.css">
 </head>
@@ -17,13 +18,15 @@
 		</nav>
 		<div class="jumbotron">
 			<div class="container">
-				<div class="col-md-6 col-md-offset-3">
+				<div class="col-sm-6 col-sm-offset-3">
 					<h1 class="text-center">Hashmere</h1>
+					<p class="text-center">Search hashtags from Twitter!</p>
+					<p id="loading">Doing Something...</p>
 					<div class="well">
 						<form id="search">
 							<div class="form-group">
-								<label for="search">Search businesses, events, or yourself</label>		
-								<input class="form-control" id="hash-search" type="search" name="search" placeholder="The world" autofocus>
+								<label for="search">Explore hashtags</label>		
+								<input class="form-control" id="hash-search" type="search" name="search" placeholder="Hello!" autofocus>
 							</div>
 							<div class="text-right">
 								<button class="btn button-primary" type="submit" id="searchBtn" disabled>Search!</button>
@@ -33,14 +36,15 @@
 				</div>
 			</div>
 		</div>
-		<div class="container" id="socialSpot">
-			<div class="col-md-8 col-md-offset-2" id="searchTags">
-			</div>
-			<div class="row clearfix">
-				<div class="col-md-10 col-md-offset-1" id="socialMedia">						
-				</div>			
-			</div>
-		</div>	
+		<br>
+		<div class="col-sm-6 col-sm-offset-3" id="searchTags"></div>
+		<br>
+		<div class="well">
+			<div class="container"> 
+				<div class="col-sm-10" id="socialMedia"></div>
+			</div>			
+		</div>
+
 
 	<!-- LOGIN MODAL -->
 	<div class="modal fade" id="login-modal" tabindex= "-1" role="form" aria-labelledby="loginModal">
@@ -104,14 +108,24 @@
 
 	<!-- signed in template -->
 	<script id="template" type="text/template">
-				<div class="col-md-4 cards" id="<%= id_str %>" id_str="<%= id_str%>"></div>	
+		<div class="col-sm-4" id="<%= id_str %>" id_str="<%= id_str%>"></div>	
 	</script>
+
 	<!-- anon template -->
 	<script id="anonTemplate" type="text/template">
-				<div>
-					<p>Search for something</p>
-				</div>	
+		<div class="col-sm-10 col-sm-offset-1">
+			<div class="col-sm-4 anon">
+				<h3 class="text-center">Search for something</h3>
+			</div>
+			<div class="col-sm-4 anon">
+				<h3 class="text-center">Search for something</h3>
+			</div>
+			<div class="col-sm-4 anon">
+				<h3 class="text-center">Search for something</h3>
+			</div>
+		</div>	
 	</script>
+
 	<!-- navigation bar template -->
 	<script id="navTemplate" type="text/template">
 		<nav class="navbar navbar-default" id="unique-nav">
@@ -121,26 +135,31 @@
 			</div>
 		</nav>
 	</script>
+
 	<!-- reset content -->
 	<script id="resetContent" type="text/template">
-			<div class="col-md-10 col-md-offset-1" id="socialMedia">						
+			<div id="socialMedia">						
 			</div>
 	</script>
 
+	<!-- recent search tags -->
 	<script id="tagTemplate" type="text/template">
-				<div class="col-md-2" id="div-<%= name %>">
-					<button type="button" class="btn btn-xs" id="tag-<%= name %>" data-name="<%= name %>"><%= name %></button>
-					<button type="button" class="close" id="close-<%= name %>" data-name="<%= name %>" aria-label="Close"><span aria-hidden="true">&times;</span></button>					
-				</div>
+		<div class="col-sm-2" id="div-<%= name %>">
+			<button type="button" class="btn btn-xs" id="tag-<%= name %>" data-name="<%= name %>"><%= name %></button>
+			<button type="button" class="close" id="close-<%= name %>" data-name="<%= name %>" aria-label="Close"><span aria-hidden="true">&times;</span></button>					
+		</div>
 	</script>
-
+	
 	<!-- underscore -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<!-- Twitter Widget JavaScript -->
 	<script id="twitter-wjs" type="text/javascript" async defer src="https://platform.twitter.com/widgets.js"></script>
+	<!-- Custom javascript -->
 	<script src="scripts/script.js"></script>
+
 	</body>
 </html>

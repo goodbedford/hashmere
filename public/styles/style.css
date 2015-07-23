@@ -1,17 +1,52 @@
-.navbar {
-	margin-bottom: 0px;
+/** {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}*/
+
+.anon {
+	height: 300px;
 }
 
-.jumbotron {
-	/*background: url(https://www.agtinternational.com/wp-content/uploads/2013/11/City-solution.jpg);*/
-	background-size: cover;
-	margin-bottom: 10px;
+body {
+	font-family: 'Nothing You Could Do', cursive;
 }
 
-iframe {
-	height: 120px;
+.btn-xs {
+	background: #CEA319;
+	padding: 1px 25px;
+	margin: -15px;
 }
 
 .close {
 	float:left;
+}
+
+.col-sm-2 {
+	float: left;
+}
+
+.jumbotron {
+	background: #418FBF;
+	margin-bottom: 0px;
+}
+
+#login {
+	background: #CEA319;
+}
+
+.navbar {
+	background: #60A4BF;
+	margin-bottom: 0px;
+}
+
+#searchBtn {
+	background: #778C58;
+}
+
+#signup {
+	background: #778C58;
+}
+
+.well {
+	background: #60A4BF;
 }

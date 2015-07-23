@@ -1,10 +1,20 @@
 $(function() {
 
+	    $(document).ajaxStart(function () {
+	        $("#loading").show();
+    	}).ajaxStop(function () {
+	        $("#loading").hide();
+	    });
+
 	function hashmereController () {};
 
 	hashmereController.prototype.template = _.template($("#template").html());
 	hashmereController.prototype.navTemplate = _.template($("#navTemplate").html());
 	hashmereController.prototype.tagTemplate = _.template($("#tagTemplate").html());
+
+	hashmereController.prototype.round5 = function(num) {
+		return Math.ceil(num/5)*5;
+	};
 	
 	hashmereController.prototype.render = function(obj) {
 		_.each(obj, function(item) {
@@ -21,9 +31,9 @@ $(function() {
 				    width        : '300'	
 				  })
 				  .then(function() {
-				  	var temp = $("#"+item.id_str+" iframe");
-					$(temp[0].contentDocument.getElementsByClassName("EmbeddedTweet")[0]).attr("style", "overflow:scroll; height:120px");
-				  })				
+						var temp = $("#"+item.id_str+" iframe");
+						$(temp[0].contentDocument.getElementsByClassName("EmbeddedTweet")[0]).attr("style", "overflow:scroll; height:120px");
+				  })		
 		});
 	};
 
@@ -191,8 +201,10 @@ $(function() {
 			var newPassword = $("#newpassword").val();
 
 			var newSignup = {email: newEmail, password: newPassword};
+			$("#signupForm")[0].reset();
 			hashmereController.prototype.signup(newSignup);
 		});
+
 		$("#newpassword").on("input", function() {
 			if ($("#newpassword").val().length >= 8) {
 				$("#passwordcheck").attr("class", "has-success");
@@ -205,7 +217,8 @@ $(function() {
 				$("#passwordcheck").removeAttr("class", "has-success");
 				$("#helppassword").attr("style", "display:none");
 			};
-		});		
+		});
+
 		$("#newpasswordrepeat").on("input", function() {
 			if (($("#newpasswordrepeat").val() === ($("#newpassword").val())) && ($("#newpassword").val().length >= 8)) {
 				$("#helppasswordcheck").attr("style", "display:none");
@@ -228,15 +241,18 @@ $(function() {
 				$("#passwordrecheck").removeAttr("class", "has-warning");
 				$("#passwordrecheck").removeAttr("class", "has-success");
 			}
-		});		
+		});
+
 		$("#loginForm").on("submit", function(event) {
 			event.preventDefault();
 			var email = $("#email").val();
 			var password = $("#password").val();
 
 			var login = {email: email, password: password};
+			$("#loginForm")[0].reset();
 			hashmereController.prototype.login(login);
 		});
+
 		$("#email").on("input", function() {
 			if ($("#email").val().length >0) {
 				$("#loginBtn").prop("disabled", false);
@@ -244,13 +260,16 @@ $(function() {
 				$("#loginBtn").prop("disabled", true);
 			}
 		});
+
 		$("#search").on("submit", function(event) {
 			event.preventDefault();
 			console.log("clicked");
 			var search = $("#hash-search").val();
 			var searchObj = {name: search};
+			$("#search")[0].reset();
 			hashmereController.prototype.search(searchObj);
 		});
+
 		$("#hash-search").on("input", function() {
 			if ($("#hash-search").val().length > 0) {
 				$("#searchBtn").prop("disabled", false);
