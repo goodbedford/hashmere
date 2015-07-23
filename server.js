@@ -128,18 +128,21 @@ app.put("/search", function(req, res) {
 	req.currentUser(function(err, user) {
 		if (user != undefined) {
 			db.Tag.find({name: req.body.name}, function(err, found) {
-				console.log("tag found: ", found)
-				if (found.length > 0) {
-					user.tags.push(found[0]);
-					user.save();
-				} else {
-					var newTag = new db.Tag({
-						name: req.body.name
-					});
-					newTag.save();
-					user.tags.push(newTag);
-					user.save();
-				};
+				var temp = _.findWhere(user.tags, {name: req.body.name});
+				console.log(temp);
+				if (!temp) {
+					if (found.length > 0) {
+						user.tags.push(found[0]);
+						user.save();
+					} else {
+						var newTag = new db.Tag({
+							name: req.body.name
+						});
+						newTag.save();
+						user.tags.push(newTag);
+						user.save();
+					};
+				};	
 			});
 			twitter.get("https://api.twitter.com/1.1/search/tweets.json?", {q: req.body.name, result_type: "recent", count: 12}, function(err, tweets) {
 				res.json(tweets);
@@ -163,6 +166,7 @@ app.delete("/tag", function(req, res) {
 		if (user != undefined) {
 			db.User.findOneAndUpdate({_id: user.id}, {$pull: {tags: {name: req.body.name}}}, function(err, updated) {
 				console.log(updated);
+				updated.save();
 				res.send("deleted");
 			})
 		} else {
