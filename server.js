@@ -96,7 +96,6 @@ app.post("/signup", function(req, res) {
 					password: req.body.password
 				};
 				db.User.createSecure(newUser.email, newUser.password, function(err, user) {
-					console.log("testing");
 					res.send(user);
 				});
 			};
@@ -129,7 +128,6 @@ app.put("/search", function(req, res) {
 		if (user != undefined) {
 			db.Tag.find({name: req.body.name}, function(err, found) {
 				var temp = _.findWhere(user.tags, {name: req.body.name});
-				console.log(temp);
 				if (!temp) {
 					if (found.length > 0) {
 						user.tags.push(found[0]);
@@ -165,7 +163,6 @@ app.delete("/tag", function(req, res) {
 	req.currentUser(function(err, user) {
 		if (user != undefined) {
 			db.User.findOneAndUpdate({_id: user.id}, {$pull: {tags: {name: req.body.name}}}, function(err, updated) {
-				console.log(updated);
 				updated.save();
 				res.send("deleted");
 			})

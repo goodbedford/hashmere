@@ -23,6 +23,17 @@ $(function() {
 				var target = $("#"+item.id_str);
 				var id = item.id_str;
 
+				// twttr.widgets.createTweet(id, target[0], 
+				//   {
+				//     conversation : 'none',    // or all
+				//     cards        : 'hidden',  // or visible 
+				//     theme        : 'light',    // or dark
+				//     width        : '300'	
+				//   })
+				//   .then(function() {
+				// 		var temp = $("#"+item.id_str+" iframe");
+				// 		$(temp[0].contentDocument.getElementsByClassName("EmbeddedTweet")[0]).attr("style", "overflow:scroll; height:120px");
+				//   })
 				twttr.widgets.createTweet(id, target[0], 
 				  {
 				    conversation : 'none',    // or all
@@ -31,10 +42,18 @@ $(function() {
 				    width        : '300'	
 				  })
 				  .then(function() {
-						var temp = $("#"+item.id_str+" iframe");
-						$(temp[0].contentDocument.getElementsByClassName("EmbeddedTweet")[0]).attr("style", "overflow:scroll; height:120px");
-				  })		
+						var temp = $("#"+item.id_str);
+						var ifrm = $("#"+item.id_str + " iframe");
+						var hgt = $($("#"+item.id_str + " iframe")[0]).attr("height");
+						$($(temp[0]).attr("class", "grid-item grid-item--"+hgt));
+						$($(ifrm[0]).attr("style", style="border: none; max-width: 100%; min-width: 220px; margin: 0px 0px; padding: 0px; display: block; position: static; visibility: visible; width: 300px;"));
+						$(".grid").masonry('layout');
+				  }).then($('.grid').masonry({
+					  columnWidth: 301,
+					  itemSelector: '.grid-item'
+					})).then($(".grid").masonry('reloadItems'));
 		});
+			// $(".grid").masonry('layout');
 	};
 
 	hashmereController.prototype.all = function() {
